@@ -1,20 +1,32 @@
 class Counter extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
         // Method binding
         this.handleAddOne = this.handleAddOne.bind(this);
         this.handleMinusOne = this.handleMinusOne.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.state = {
             count: 0,
-            demo: "Should be unchanged"
+        };
+    }
+
+    componentDidMount() {
+        const count = parseInt(localStorage.getItem("count"), 10);
+        if (!isNaN(count)) {
+            this.setState(() => ({ count: count }));
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.count !== this.state.count) {
+            localStorage.setItem("count", this.state.count);
         }
     }
 
     handleAddOne() {
         this.setState((prevState) => {
             return {
-                count: prevState.count + 1
+                count: prevState.count + 1,
             };
         });
     }
@@ -22,7 +34,7 @@ class Counter extends React.Component {
     handleMinusOne() {
         this.setState((prevState) => {
             return {
-                count: prevState.count - 1
+                count: prevState.count - 1,
             };
         });
     }
@@ -30,8 +42,8 @@ class Counter extends React.Component {
     handleReset() {
         this.setState(() => {
             return {
-                count: 0
-            };   
+                count: 0,
+            };
         });
     }
 
@@ -47,35 +59,4 @@ class Counter extends React.Component {
     }
 }
 
-ReactDOM.render(<Counter />, document.getElementById('app'))
-
-// let count = 0;
-// const addOne = () => {
-//     count++;
-//     renderCounterApp() // Need to re-render everytime there is changes in the data as JSX does not have data-binding
-// }
-// const minusOne = () => {
-//     count--;
-//     renderCounterApp()
-// }
-
-// const reset = () => {
-//     count = 0;
-//     renderCounterApp()
-// }
-
-// const renderCounterApp = () => {
-//     let template3 = (
-//         <div>
-//             <h1>Count = {count}</h1>
-//             <button onClick={addOne}>+1</button>
-//             <button onClick={minusOne}>-1</button>
-//             <button onClick={reset}>Reset</button>
-//         </div>
-//     );
-    
-//     let appRoot = document.getElementById('app');
-//     ReactDOM.render(template3, appRoot)
-// }
-
-// renderCounterApp();
+ReactDOM.render(<Counter />, document.getElementById("app"));
